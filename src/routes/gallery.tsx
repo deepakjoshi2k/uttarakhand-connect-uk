@@ -1,1 +1,87 @@
-import { createFileRoute } from '@tanstack/react-router'; import { useState } from 'react'; import { X } from 'lucide-react'; import { Button } from '@/components/ui/button'; import { PageHero,meta } from '@/components/site/primitives'; import { gallery } from '@/data/gallery'; export const Route=createFileRoute('/gallery')({head:()=>meta('Gallery','Photographs from UKDB UK community gatherings and projects.'),component:Gallery});function Gallery(){const[open,setOpen]=useState<number|null>(null);return <main><PageHero title="Gallery" copy="Moments of joy, service and belonging."/><section className="section-pad"><div className="container-site columns-1 gap-5 sm:columns-2 lg:columns-3">{gallery.map((g,i)=><button key={`${g.caption}-${i}`} onClick={()=>setOpen(i)} className="mb-5 block w-full break-inside-avoid overflow-hidden rounded-2xl"><img src={g.src} alt={g.alt} loading="lazy" className={`w-full object-cover ${i%3===1?'aspect-square':'aspect-[4/3]'}`}/><span className="block bg-card p-3 text-left text-sm font-medium">{g.caption}</span></button>)}</div></section>{open!==null&&<div className="fixed inset-0 z-50 grid place-items-center bg-primary/95 p-4" role="dialog" aria-modal="true"><Button size="icon" variant="secondary" onClick={()=>setOpen(null)} className="absolute right-5 top-5" aria-label="Close image"><X/></Button><figure><img src={gallery[open]?.src} alt={gallery[open]?.alt} className="max-h-[80vh] max-w-full rounded-lg object-contain"/><figcaption className="mt-3 text-center text-primary-foreground">{gallery[open]?.caption}</figcaption></figure></div>}</main>}
+import mountain from '@/assets/himalayan-community.jpg';
+import celebration from '@/assets/community-celebration.jpg';
+import aipan from '@/assets/aipan-heritage.jpg';
+import leader from '@/assets/community-leader.jpg';
+
+export type Photo = { src: string; alt: string };
+export type Album = {
+  slug: string;
+  title: string;
+  date: string;
+  venue: string;
+  cover: string;
+  photos: Photo[];
+};
+
+/* ───────────────────────────────────────────────────────────────
+   HOW TO ADD AN EVENT ALBUM
+
+   1. In GitHub, open the `public` folder and create:
+        public/gallery/<event-slug>/
+      Upload your photos there (Add file → Upload files).
+      Use lowercase names with no spaces, e.g. 01.jpg, 02.jpg.
+
+   2. Add a block to the `albums` array below. Because the files
+      live in `public`, you reference them by path — no import
+      needed:
+
+        {
+          slug: 'harela-2026',
+          title: 'Harela 2026',
+          date: '16 July 2026',
+          venue: 'Harrow Arts Centre, London',
+          cover: '/gallery/harela-2026/01.jpg',
+          photos: [
+            { src: '/gallery/harela-2026/01.jpg', alt: 'Planting saplings together' },
+            { src: '/gallery/harela-2026/02.jpg', alt: 'Children singing on stage' },
+          ],
+        },
+
+   3. Always write a real `alt` description — it is what screen
+      readers announce and what Google reads.
+
+   Newest event first; that is the order the page shows.
+   ─────────────────────────────────────────────────────────────── */
+
+export const albums: Album[] = [
+  {
+    slug: 'community-celebration-london',
+    title: 'Community celebration',
+    date: '14 June 2026',
+    venue: 'London',
+    cover: celebration,
+    photos: [
+      { src: celebration, alt: 'Families applauding at an Uttarakhand cultural gathering' },
+      { src: leader, alt: 'Community leader wearing a traditional shawl addressing the room' },
+      { src: celebration, alt: 'Children and adults enjoying a folk performance' },
+    ],
+  },
+  {
+    slug: 'aipan-workshop',
+    title: 'Aipan workshop',
+    date: '3 May 2026',
+    venue: 'Community hall, Birmingham',
+    cover: aipan,
+    photos: [
+      { src: aipan, alt: 'Traditional red and white Aipan artwork with brass lamps' },
+      { src: aipan, alt: 'Hands painting a rice-paste pattern on dark red board' },
+    ],
+  },
+  {
+    slug: 'partners-in-uttarakhand',
+    title: 'Visiting our partners',
+    date: '22 March 2026',
+    venue: 'Pauri and Almora, Uttarakhand',
+    cover: mountain,
+    photos: [
+      { src: mountain, alt: 'A village gathering among green Himalayan ridges' },
+      { src: mountain, alt: 'Sunrise over an Uttarakhand hill village' },
+      { src: leader, alt: 'Teacher standing outside a newly opened school library' },
+    ],
+  },
+];
+
+// Flat list kept so other pages (e.g. programme detail) can pull a few photos.
+export const gallery = albums.flatMap((album) =>
+  album.photos.map((photo) => ({ ...photo, caption: album.title })),
+);
