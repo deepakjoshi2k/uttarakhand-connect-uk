@@ -1,0 +1,5 @@
+- [ ] Design system and shared layout
+- [ ] Typed content collections
+- [ ] Home and all content pages
+- [ ] Forms, tabs, lightbox, and detail routes
+- [ ] Desktop and mobile browser verification

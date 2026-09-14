@@ -1,0 +1,4 @@
+export type HeritageItem={title:string;kind:'Culture'|'Places'|'People';text:string};
+export const heritage:HeritageItem[]=[
+ {title:'Chholiya & Jhora',kind:'Culture',text:'Martial rhythm and communal circles that turn movement into memory.'},{title:'Festivals of the seasons',kind:'Culture',text:'Harela, Phool Dei and Ghughutiya bind celebration to land and time.'},{title:'A mountain kitchen',kind:'Culture',text:'Mandua, bhatt, jhangora and gahat speak of ingenuity and belonging.'},{title:'Garhwal',kind:'Places',text:'River valleys, high shrines and villages stretching from Dehradun to the upper Himalaya.'},{title:'Kumaon',kind:'Places',text:'Lake country, orchards and temple towns shaped by craft, song and scholarship.'},{title:'Gaura Devi',kind:'People',text:'A Chipko movement leader whose courage made environmental stewardship visible worldwide.'}
+];

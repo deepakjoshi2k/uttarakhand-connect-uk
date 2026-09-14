@@ -1,0 +1,7 @@
+export type Program = { slug:string; title:string; eyebrow:string; description:string; impact:string; stats:{label:string;value:string}[] };
+export const programs: Program[] = [
+ {slug:'shiksha-setu',title:'Shiksha Setu',eyebrow:'Education',description:'Scholarships, learning materials and mentoring for students in remote hill communities.',impact:'Creating a bridge from village classrooms to confident futures.',stats:[{label:'Students supported',value:'184'},{label:'Schools reached',value:'12'},{label:'Mentors',value:'36'}]},
+ {slug:'pahad-health',title:'Pahad Health',eyebrow:'Wellbeing',description:'Health camps and essential care partnerships for underserved families across Uttarakhand.',impact:'Bringing trusted care closer to mountain communities.',stats:[{label:'Health camps',value:'18'},{label:'People reached',value:'2,400+'},{label:'Partners',value:'9'}]},
+ {slug:'roots-rhythm',title:'Roots & Rhythm',eyebrow:'Culture',description:'Language, music and dance workshops that help young people inherit a living culture.',impact:'Keeping our stories, songs and language alive across generations.',stats:[{label:'Young participants',value:'320'},{label:'Workshops',value:'42'},{label:'Artists hosted',value:'28'}]},
+ {slug:'aapda-saath',title:'Aapda Saath',eyebrow:'Relief',description:'Rapid, transparent community support when floods, landslides or winter hardship strike.',impact:'Standing together when the mountains need us most.',stats:[{label:'Relief drives',value:'11'},{label:'Families helped',value:'760'},{label:'Local partners',value:'14'}]},
+];
