@@ -1,87 +1,172 @@
-import mountain from '@/assets/himalayan-community.jpg';
-import celebration from '@/assets/community-celebration.jpg';
-import aipan from '@/assets/aipan-heritage.jpg';
-import leader from '@/assets/community-leader.jpg';
+import { createFileRoute } from '@tanstack/react-router';
+import { useEffect, useState } from 'react';
+import { CalendarDays, ChevronLeft, ChevronRight, MapPin, X } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { PageHero, SectionHeading, meta } from '@/components/site/primitives';
+import { albums } from '@/data/gallery';
 
-export type Photo = { src: string; alt: string };
-export type Album = {
-  slug: string;
-  title: string;
-  date: string;
-  venue: string;
-  cover: string;
-  photos: Photo[];
-};
+export const Route = createFileRoute('/gallery')({
+  head: () =>
+    meta('Gallery', 'Photographs from UKDB UK gatherings, workshops and project visits, event by event.'),
+  component: Gallery,
+});
 
-/* ───────────────────────────────────────────────────────────────
-   HOW TO ADD AN EVENT ALBUM
+type Open = { album: number; photo: number } | null;
 
-   1. In GitHub, open the `public` folder and create:
-        public/gallery/<event-slug>/
-      Upload your photos there (Add file → Upload files).
-      Use lowercase names with no spaces, e.g. 01.jpg, 02.jpg.
+function Gallery() {
+  const [filter, setFilter] = useState<string>('all');
+  const [open, setOpen] = useState<Open>(null);
 
-   2. Add a block to the `albums` array below. Because the files
-      live in `public`, you reference them by path — no import
-      needed:
+  const shown = filter === 'all' ? albums : albums.filter((a) => a.slug === filter);
+  const current = open ? albums[open.album] : null;
+  const photo = open && current ? current.photos[open.photo] : null;
 
-        {
-          slug: 'harela-2026',
-          title: 'Harela 2026',
-          date: '16 July 2026',
-          venue: 'Harrow Arts Centre, London',
-          cover: '/gallery/harela-2026/01.jpg',
-          photos: [
-            { src: '/gallery/harela-2026/01.jpg', alt: 'Planting saplings together' },
-            { src: '/gallery/harela-2026/02.jpg', alt: 'Children singing on stage' },
-          ],
-        },
+  function move(step: number) {
+    if (!open || !current) return;
+    const next = (open.photo + step + current.photos.length) % current.photos.length;
+    setOpen({ ...open, photo: next });
+  }
 
-   3. Always write a real `alt` description — it is what screen
-      readers announce and what Google reads.
+  useEffect(() => {
+    if (!open) return;
+    function onKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') setOpen(null);
+      if (e.key === 'ArrowRight') move(1);
+      if (e.key === 'ArrowLeft') move(-1);
+    }
+    addEventListener('keydown', onKey);
+    return () => removeEventListener('keydown', onKey);
+  }, [open]);
 
-   Newest event first; that is the order the page shows.
-   ─────────────────────────────────────────────────────────────── */
+  return (
+    <main>
+      <PageHero title="Gallery" copy="Every gathering, kept as it happened." />
 
-export const albums: Album[] = [
-  {
-    slug: 'community-celebration-london',
-    title: 'Community celebration',
-    date: '14 June 2026',
-    venue: 'London',
-    cover: celebration,
-    photos: [
-      { src: celebration, alt: 'Families applauding at an Uttarakhand cultural gathering' },
-      { src: leader, alt: 'Community leader wearing a traditional shawl addressing the room' },
-      { src: celebration, alt: 'Children and adults enjoying a folk performance' },
-    ],
-  },
-  {
-    slug: 'aipan-workshop',
-    title: 'Aipan workshop',
-    date: '3 May 2026',
-    venue: 'Community hall, Birmingham',
-    cover: aipan,
-    photos: [
-      { src: aipan, alt: 'Traditional red and white Aipan artwork with brass lamps' },
-      { src: aipan, alt: 'Hands painting a rice-paste pattern on dark red board' },
-    ],
-  },
-  {
-    slug: 'partners-in-uttarakhand',
-    title: 'Visiting our partners',
-    date: '22 March 2026',
-    venue: 'Pauri and Almora, Uttarakhand',
-    cover: mountain,
-    photos: [
-      { src: mountain, alt: 'A village gathering among green Himalayan ridges' },
-      { src: mountain, alt: 'Sunrise over an Uttarakhand hill village' },
-      { src: leader, alt: 'Teacher standing outside a newly opened school library' },
-    ],
-  },
-];
+      <section className="section-pad">
+        <div className="container-site">
+          <div className="mb-12 flex flex-wrap gap-2">
+            <Button
+              variant={filter === 'all' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => setFilter('all')}
+            >
+              All events
+            </Button>
+            {albums.map((album) => (
+              <Button
+                key={album.slug}
+                variant={filter === album.slug ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setFilter(album.slug)}
+              >
+                {album.title}
+              </Button>
+            ))}
+          </div>
 
-// Flat list kept so other pages (e.g. programme detail) can pull a few photos.
-export const gallery = albums.flatMap((album) =>
-  album.photos.map((photo) => ({ ...photo, caption: album.title })),
-);
+          {shown.map((album) => {
+            const index = albums.indexOf(album);
+            return (
+              <article key={album.slug} className="mb-20 last:mb-0">
+                <SectionHeading eyebrow={album.date} title={album.title} />
+                <p className="-mt-8 mb-8 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
+                  <span className="flex items-center gap-2">
+                    <CalendarDays size={16} />
+                    {album.date}
+                  </span>
+                  <span className="flex items-center gap-2">
+                    <MapPin size={16} />
+                    {album.venue}
+                  </span>
+                  <span>
+                    {album.photos.length} photo{album.photos.length === 1 ? '' : 's'}
+                  </span>
+                </p>
+
+                <div className="columns-1 gap-5 sm:columns-2 lg:columns-3">
+                  {album.photos.map((p, i) => (
+                    <button
+                      key={`${album.slug}-${i}`}
+                      onClick={() => setOpen({ album: index, photo: i })}
+                      className="card-lift mb-5 block w-full break-inside-avoid overflow-hidden rounded-2xl border bg-card"
+                      aria-label={`Open photo: ${p.alt}`}
+                    >
+                      <img
+                        src={p.src}
+                        alt={p.alt}
+                        loading="lazy"
+                        className={`w-full object-cover ${i % 3 === 1 ? 'aspect-square' : 'aspect-[4/3]'}`}
+                      />
+                    </button>
+                  ))}
+                </div>
+              </article>
+            );
+          })}
+
+          {albums.length === 0 && (
+            <p className="text-muted-foreground">
+              Photographs from our next gathering will appear here.
+            </p>
+          )}
+        </div>
+      </section>
+
+      {open && current && photo && (
+        <div
+          className="fixed inset-0 z-50 grid place-items-center bg-primary/95 p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-label={`${current.title} photo viewer`}
+        >
+          <Button
+            size="icon"
+            variant="secondary"
+            onClick={() => setOpen(null)}
+            className="absolute right-5 top-5"
+            aria-label="Close image"
+          >
+            <X />
+          </Button>
+
+          {current.photos.length > 1 && (
+            <>
+              <Button
+                size="icon"
+                variant="secondary"
+                onClick={() => move(-1)}
+                className="absolute left-4 top-1/2 -translate-y-1/2"
+                aria-label="Previous photo"
+              >
+                <ChevronLeft />
+              </Button>
+              <Button
+                size="icon"
+                variant="secondary"
+                onClick={() => move(1)}
+                className="absolute right-4 top-1/2 -translate-y-1/2"
+                aria-label="Next photo"
+              >
+                <ChevronRight />
+              </Button>
+            </>
+          )}
+
+          <figure className="max-w-5xl">
+            <img
+              src={photo.src}
+              alt={photo.alt}
+              className="max-h-[78vh] max-w-full rounded-lg object-contain"
+            />
+            <figcaption className="mt-4 text-center text-primary-foreground">
+              <span className="block font-display text-xl">{current.title}</span>
+              <span className="mt-1 block text-sm text-primary-foreground/70">
+                {photo.alt} — {open.photo + 1} of {current.photos.length}
+              </span>
+            </figcaption>
+          </figure>
+        </div>
+      )}
+    </main>
+  );
+}
