@@ -1,0 +1,3 @@
+export const timeline=[
+ {year:'2017',title:'A kitchen-table beginning',text:'A few families began meeting to keep language and traditions close.'},{year:'2019',title:'Our first community fund',text:'Members pooled support for school supplies in two hill villages.'},{year:'2021',title:'Care across distance',text:'An emergency appeal delivered medical and family support through local partners.'},{year:'2023',title:'A registered charity',text:'Formal governance created a stronger foundation for responsible growth.'},{year:'2025',title:'A wider circle',text:'Cultural, youth and wellbeing programmes expanded across the United Kingdom.'}
+];
