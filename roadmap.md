@@ -3,4 +3,4 @@
 - [ ] Home and all content pages
 - [ ] Forms, tabs, lightbox, and detail routes
 - [ ] Desktop and mobile browser verification
-- [ ] Event announcement popup and session behavior
+- [x] Event announcement popup and session behavior
