@@ -11,8 +11,10 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as ContactRouteImport } from './routes/contact'
 import { Route as EventsRouteImport } from './routes/events'
 import { Route as GalleryRouteImport } from './routes/gallery'
+import { Route as GetInvolvedRouteImport } from './routes/get-involved'
 import { Route as HeritageRouteImport } from './routes/heritage'
 import { Route as ProgramsRouteImport } from './routes/programs'
 import { Route as EventsSlugRouteImport } from './routes/events.$slug'
@@ -28,6 +30,11 @@ const AboutRoute = AboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EventsRoute = EventsRouteImport.update({
   id: '/events',
   path: '/events',
@@ -36,6 +43,11 @@ const EventsRoute = EventsRouteImport.update({
 const GalleryRoute = GalleryRouteImport.update({
   id: '/gallery',
   path: '/gallery',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GetInvolvedRoute = GetInvolvedRouteImport.update({
+  id: '/get-involved',
+  path: '/get-involved',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HeritageRoute = HeritageRouteImport.update({
@@ -62,8 +74,10 @@ const ProgramsSlugRoute = ProgramsSlugRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
   '/events': typeof EventsRouteWithChildren
   '/gallery': typeof GalleryRoute
+  '/get-involved': typeof GetInvolvedRoute
   '/heritage': typeof HeritageRoute
   '/programs': typeof ProgramsRouteWithChildren
   '/events/$slug': typeof EventsSlugRoute
@@ -72,8 +86,10 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
   '/events': typeof EventsRouteWithChildren
   '/gallery': typeof GalleryRoute
+  '/get-involved': typeof GetInvolvedRoute
   '/heritage': typeof HeritageRoute
   '/programs': typeof ProgramsRouteWithChildren
   '/events/$slug': typeof EventsSlugRoute
@@ -83,8 +99,10 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
   '/events': typeof EventsRouteWithChildren
   '/gallery': typeof GalleryRoute
+  '/get-involved': typeof GetInvolvedRoute
   '/heritage': typeof HeritageRoute
   '/programs': typeof ProgramsRouteWithChildren
   '/events/$slug': typeof EventsSlugRoute
@@ -95,8 +113,10 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/contact'
     | '/events'
     | '/gallery'
+    | '/get-involved'
     | '/heritage'
     | '/programs'
     | '/events/$slug'
@@ -105,8 +125,10 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/contact'
     | '/events'
     | '/gallery'
+    | '/get-involved'
     | '/heritage'
     | '/programs'
     | '/events/$slug'
@@ -115,8 +137,10 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/about'
+    | '/contact'
     | '/events'
     | '/gallery'
+    | '/get-involved'
     | '/heritage'
     | '/programs'
     | '/events/$slug'
@@ -126,8 +150,10 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  ContactRoute: typeof ContactRoute
   EventsRoute: typeof EventsRouteWithChildren
   GalleryRoute: typeof GalleryRoute
+  GetInvolvedRoute: typeof GetInvolvedRoute
   HeritageRoute: typeof HeritageRoute
   ProgramsRoute: typeof ProgramsRouteWithChildren
 }
@@ -148,6 +174,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/events': {
       id: '/events'
       path: '/events'
@@ -160,6 +193,13 @@ declare module '@tanstack/react-router' {
       path: '/gallery'
       fullPath: '/gallery'
       preLoaderRoute: typeof GalleryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/get-involved': {
+      id: '/get-involved'
+      path: '/get-involved'
+      fullPath: '/get-involved'
+      preLoaderRoute: typeof GetInvolvedRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/heritage': {
@@ -219,8 +259,10 @@ const ProgramsRouteWithChildren = ProgramsRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  ContactRoute: ContactRoute,
   EventsRoute: EventsRouteWithChildren,
   GalleryRoute: GalleryRoute,
+  GetInvolvedRoute: GetInvolvedRoute,
   HeritageRoute: HeritageRoute,
   ProgramsRoute: ProgramsRouteWithChildren,
 }
